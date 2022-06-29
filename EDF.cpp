@@ -59,7 +59,7 @@ struct GivePriority
 {
     bool operator()(process_instance &p1, process_instance &p2)
     {
-        return p1.period > p2.period;
+        return p1.deadline > p2.deadline;
     }
 };
 
@@ -133,7 +133,7 @@ int main()
 
         // Opening output file and printing logistics to log file
         ofstream log_file;
-        log_file.open("RM-Log.txt");
+        log_file.open("EDF-Log.txt");
         if (log_file.is_open())
         {
             // Printing info about process which joined the system at time 0
@@ -212,7 +212,7 @@ int main()
                         process_instance new_process = process_not_entered.top();
                         if (!cpu.empty())
                         {
-                            if (!(cpu.top() == new_process) && cpu.top().period > new_process.period && time != 0 && !start)
+                            if (!(cpu.top() == new_process) && cpu.top().deadline > new_process.deadline && time != 0 && !start)
                             {
                                 log_file << "Process P" << cpu.top().pid << " is preempted by process P" << new_process.pid << " at time " << time << ". Remaining processing time: " << cpu.top().runtime_left << endl;
                                 process_instance temp = cpu.top();
@@ -258,7 +258,7 @@ int main()
             }
             // Printing the statistics to stat file
             ofstream stat_file;
-            stat_file.open("RM-Stats.txt");
+            stat_file.open("EDF-Stats.txt");
             if (stat_file.is_open())
             {
                 stat_file << "Number of processes that came into the system: " << no_of_process_enter << endl;
